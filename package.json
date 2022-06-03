@@ -7,7 +7,7 @@
     "build": "tsc",
     "make": "yarn build && nexe --build --python=$(which python3) -o gerber2pdf",
     "start": "tsc --watch",
-    "docs": "yarn build && node ./lib/docs/make.js && add README.md"
+    "docs": "yarn build && node ./lib/docs/make.js && git add README.md"
   },
   "bin": {
     "gerber-to-pdf": "./bin.js"
