@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "make": "yarn build && nexe bin.js --build --python=$(which python3) -o gerber2pdf-macos -r \"node_modules/**/*.trie\" ",
+    "make": "yarn build && nexe bin.js --build --python=$(which python3) -o gerber2pdf-macos -r \"node_modules/**/*.*\" ",
     "start": "tsc --watch",
     "docs": "yarn build && node ./lib/docs/make.js && git add README.md"
   },
