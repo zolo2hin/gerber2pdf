@@ -12,6 +12,7 @@ import {
 } from "./rules";
 import { getSvg, readDir, readFile } from "./helpers";
 import { PdfWriter } from "./entities/PdfWriter";
+import { man } from "./docs/man";
 
 const args = require('command-line-args')(optionDefinitions);
 
@@ -199,7 +200,7 @@ const convert = async () => {
 };
 
 const showMan = async () => {
-  console.log((await readFile(path.resolve("./man.txt"))).toString());
+  console.log(man);
 };
 
 convert();

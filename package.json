@@ -1,14 +1,16 @@
 {
-  "name": "gerber-to-pdf",
+  "name": "gerber2pdf",
   "version": "1.0.0",
   "main": "./lib/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc && sh ./scripts/create_docs.sh",
-    "start": "tsc --watch"
+    "build": "tsc",
+    "make": "yarn build && nexe --build --python=$(which python3) -o gerber2pdf",
+    "start": "tsc --watch",
+    "docs": "yarn build && node ./lib/docs/make.js"
   },
   "bin": {
-    "gerber-to-pdf": "./bin/bin.js"
+    "gerber-to-pdf": "./bin.js"
   },
   "dependencies": {
     "@types/jsdom": "^12.2.3",
@@ -25,6 +27,8 @@
   },
   "devDependencies": {
     "@types/pdfkit": "^0.7.36",
+    "pre-commit": "^1.2.2",
     "typescript": "^3.3.4000"
-  }
+  },
+  "precommit": "docs"
 }

@@ -4,11 +4,6 @@ Crude script which takes gerber files from Autodesk Eagle and converts them to p
 
 Main reason for this project is lack of quality negative export from eagle which is also proportional with real-world size.
 
-# WIP
-
-This project is WORK IN PROGRESS.
-
-Circuit placement is hardcoded and i need to implement some way to parameterize it.
 
 # Usage
 
@@ -27,9 +22,6 @@ $ gerber-to-pdf bottom.gbr top.gbr -d drill.xln
 ```
 # Example output
 
-[Link to example pdf](./example_output.pdf) (It takes while to render in github for some reason)
-
-![Example](./screenshot.png)
 
 # Supported Options
 

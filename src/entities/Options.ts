@@ -1,6 +1,4 @@
-import { GerbersLib } from "./GerbersLib";
-
-export type PcbMode = 'ttm' | 'photo';
+import { PcbMode } from "../@types/pcbMode";
 
 export class Options {
   src: string;

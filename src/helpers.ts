@@ -6,6 +6,7 @@ import { SvgItem } from "./entities/SvgItem";
 
 export const readDir = fs.promises.readdir;
 export const readFile = promisify(fs.readFile);
+export const writeFile = fs.promises.writeFile;
 
 export const Converter = (code: string, options: Record<string, unknown> = {}): Promise<GerberToSvg.Converter> => {
   return new Promise((resolve) => {
