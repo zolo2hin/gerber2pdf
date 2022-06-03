@@ -1,32 +1,29 @@
 {
   "name": "gerber2pdf",
-  "version": "0.3.7",
-  "main": "./lib/index.js",
+  "version": "0.3.8",
+  "main": "bin.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "make": "yarn build && nexe --build --python=$(which python3) -o gerber2pdf",
+    "make": "yarn build && nexe bin.js --build --python=$(which python3) -o gerber2pdf-macos -r \"node_modules/**/*.trie\" ",
     "start": "tsc --watch",
     "docs": "yarn build && node ./lib/docs/make.js && git add README.md"
   },
-  "bin": {
-    "gerber-to-pdf": "./bin.js"
-  },
   "dependencies": {
+    "@types/dom-parser": "^0.1.1",
     "@types/jsdom": "^12.2.3",
     "@types/pump": "^1.1.1",
     "command-line-args": "^5.2.1",
-    "commander": "^2.19.0",
     "gerber-parser": "^4.2.7",
     "gerber-plotter": "^4.2.8",
     "gerber-to-svg": "^4.2.0",
-    "jsdom": "^14.0.0",
     "pdfkit": "^0.9.0",
     "pump": "^3.0.0",
     "svg-to-pdfkit": "^0.1.7"
   },
   "devDependencies": {
     "@types/pdfkit": "^0.7.36",
+    "nexe": "^4.0.0-rc.1",
     "pre-commit": "^1.2.2",
     "typescript": "^3.3.4000"
   },
