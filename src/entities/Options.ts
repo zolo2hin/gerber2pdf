@@ -8,7 +8,11 @@ export class Options {
   copy?: number;
   sizeCorrection?: number;
   useDrill?: boolean;
-  drillCorrection?: {
+  drillCorrectionTop?: {
+    x: number;
+    y: number;
+  };
+  drillCorrectionBottom?: {
     x: number;
     y: number;
   };

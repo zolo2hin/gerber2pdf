@@ -151,9 +151,11 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
           const drillOffsetLeft = (realWidth - drillRealWidth) / 2.0;
           const drillOffsetTop = (realHeight - drillRealHeight) / 2.0;
 
+          const drillCorrection = isTop ? options.drillCorrectionTop : options.drillCorrectionBottom;
+
           pdf.printSvg(drillSvg.content,
-            offsetLeft + drillOffsetLeft + options.drillCorrection.x * (isFlipped ? -1.0 : 1.0),
-            offsetTop + drillOffsetTop + options.drillCorrection.y,
+            offsetLeft + drillOffsetLeft + drillCorrection.x * (isFlipped ? -1.0 : 1.0),
+            offsetTop + drillOffsetTop + drillCorrection.y,
             drillRealWidth,
             drillRealHeight,
             false);

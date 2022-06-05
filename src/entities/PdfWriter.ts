@@ -14,7 +14,7 @@ export class PdfWriter {
 
   printOptionsAnotation(options: Options) {
     this.doc.fontSize(6);
-    this.doc.text(`${options.src}, mode: ${options.pcbMode}, size corr: ${options.sizeCorrection}, drill corr: x(${options.drillCorrection.x}) y(${options.drillCorrection.y}), flip: ${options.flip}`,
+    this.doc.text(`${options.src}, mode: ${options.pcbMode}, size corr: ${options.sizeCorrection}, drill corr top: x(${options.drillCorrectionTop.x}) y(${options.drillCorrectionTop.y}), drill corr bot: x(${options.drillCorrectionBottom.x}) y(${options.drillCorrectionBottom.y}) flip: ${options.flip}`,
       options.padding,
       options.padding,
     );
