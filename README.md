@@ -59,7 +59,8 @@ TBC
                 flip                  - should top layer be flipped horizontally; default: true
                 annotatePage          - adds some PCB information and util settings to the output page; default: true
                 outputExtra           - adds suffiks to the output file name with extra information; default: true
-
+  
+  --debug,  -d Toggle debug mode
   
 ```
 

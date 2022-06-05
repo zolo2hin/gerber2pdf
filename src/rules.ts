@@ -6,6 +6,7 @@ export const optionDefinitions = [
   { name: 'option', alias: 'o', type: String, multiple: true, },
   { name: 'include', alias: 'i', type: String, multiple: true },
   { name: 'exclude', alias: 'e', type: String, multiple: true },
+  { name: 'debug', alias: 'd', type: Number, defaultOption: 0 },
   { name: 'help', alias: 'h', type: Number, defaultOption: 0 },
 ];
 

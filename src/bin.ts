@@ -15,12 +15,17 @@ import { PdfWriter } from "./entities/PdfWriter";
 import { man } from "./docs/man";
 
 const args = require('command-line-args')(optionDefinitions);
+let debugMode = 0;
 
 const retrieveOptions = async (): Promise<Options> => {
   const options = defaultOptions;
 
   if (!args['folders'] || !args['folders'].length) {
     throw new Error('You must specify source folder');
+  }
+
+  if (args['debug']) {
+    debugMode = args['debug'];
   }
 
   options.src = path.resolve(args['folders'][0]);
@@ -56,9 +61,14 @@ const defineGerbers = async (folder: string, matchers: Record<keyof GerbersLib, 
   return lib;
 };
 
+const generateOutputFileName = (options: Options): string => {
+  return `${options.outputFileName}${options.outputExtra ? ('_' + options.pcbMode + '_' + options.sizeCorrection + '_' + Date.now()) : ''}.pdf`;
+};
+
 const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
+  const outputFileName = generateOutputFileName(options);
   const pdf = new PdfWriter(
-    path.resolve(options.outputDir, `${options.outputFileName}${options.outputExtra ? ('_' + options.pcbMode + '_' + options.sizeCorrection + '_' + Date.now()) : ''}.pdf`),
+    path.resolve(options.outputDir, outputFileName),
     pdfWidth,
     pdfHeight
   );
@@ -78,7 +88,9 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
         continue;
       }
 
-      console.log(gerbers[k as keyof GerbersLib]);
+      if (debugMode) {
+        console.log(gerbers[k as keyof GerbersLib]);
+      }
 
       try {
         const isCopper = copperLayers.includes(k);
@@ -174,6 +186,8 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
   }
 
   pdf.save();
+
+  console.log(`ok. saved to: ${outputFileName}`)
 };
 
 const convert = async () => {
@@ -195,7 +209,9 @@ const convert = async () => {
     return;
   }
 
-  console.log(options);
+  if (debugMode) {
+    console.log(options);
+  }
 
   const gerbers: GerbersLib = await defineGerbers(options.src, matchers);
   await toSinglePdf(gerbers, options);
