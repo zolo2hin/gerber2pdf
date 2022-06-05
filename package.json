@@ -13,6 +13,7 @@
     "@types/dom-parser": "^0.1.1",
     "@types/jsdom": "^12.2.3",
     "@types/pump": "^1.1.1",
+    "class-transformer": "^0.5.1",
     "command-line-args": "^5.2.1",
     "gerber-parser": "^4.2.7",
     "gerber-plotter": "^4.2.8",
