@@ -1,6 +1,6 @@
 {
   "name": "gerber2pdf",
-  "version": "0.3.8",
+  "version": "0.4.2",
   "main": "bin.js",
   "license": "MIT",
   "scripts": {
