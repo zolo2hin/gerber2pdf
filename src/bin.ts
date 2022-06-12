@@ -13,7 +13,7 @@ import {
 import {getSvg, readDir, readFile} from "./helpers";
 import {PdfWriter} from "./entities/PdfWriter";
 import {man} from "./docs/man";
-import {plainToClass, plainToClassFromExist} from 'class-transformer'
+import {plainToClassFromExist} from 'class-transformer'
 
 const args = require('command-line-args')(optionDefinitions);
 let debugMode = 0;
@@ -114,10 +114,12 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
             try {
                 const isCopper = copperLayers.includes(k);
                 const isSilk = ['topSilk', 'bottomSilk'].includes(k);
+                const isMask = ['topMask', 'bottomMask'].includes(k);
+                const isNegativeMask = ['topMaskNegative', 'bottomMaskNegative'].includes(k);
                 const isDrilled = isCopper && gerbers.drill;
                 const isTop = k.indexOf('top') === 0;
                 const isBottom = k.indexOf('bottom') === 0;
-                const isModeApplicable = ((isCopper || isSilk) && options.pcbMode == 'photo');
+                const isModeApplicable = ((isCopper || isSilk) && options.pcbMode == 'photo' && !isNegativeMask);
                 const isFlipped = options.flip && isTop;
                 const gerber = gerbers[k as keyof GerbersLib];
 
@@ -170,33 +172,34 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
                     realHeight
                 );
 
-                // if (isDrilled) {
-                //   const drillSvg = await getSvg(gerbers.drill, {
-                //     flip: isFlipped,
-                //     attributes: {
-                //       color: isModeApplicable ? bColor : fColor,
-                //     }
-                //   });
-                //   const drillRealWidth = drillSvg.width * pdfMult;
-                //   const drillRealHeight = drillSvg.height * pdfMult;
-                //   const drillOffsetLeft = (realWidth - drillRealWidth) / 2.0;
-                //   const drillOffsetTop = (realHeight - drillRealHeight) / 2.0;
-                //
-                //   const drillCorrection = isTop ? options.drillCorrectionTop : options.drillCorrectionBottom;
-                //
-                //   if (debugMode == 2) {
-                //     console.info('Offset:', offsetLeft, offsetTop);
-                //     console.info('Drill correction:', drillCorrection);
-                //     console.info('Drill offset:', drillOffsetLeft, drillOffsetTop);
-                //   }
-                //
-                //   pdf.printSvg(drillSvg.content,
-                //     offsetLeft + parseFloat(drillOffsetLeft.toString()) + drillCorrection.x * (isFlipped ? -1.0 : 1.0),
-                //     offsetTop + parseFloat(drillOffsetTop.toString()) + drillCorrection.y,
-                //     drillRealWidth,
-                //     drillRealHeight,
-                //     false);
-                // }
+                // Drill
+                if (isDrilled) {
+                    const drillSvg = await getSvg(gerbers.drill, {
+                        flip: isFlipped,
+                        attributes: {
+                            color: isModeApplicable ? bColor : fColor,
+                        }
+                    });
+                    const drillRealWidth = drillSvg.width * pdfMult;
+                    const drillRealHeight = drillSvg.height * pdfMult;
+                    const drillOffsetLeft = (realWidth - drillRealWidth) / 2.0;
+                    const drillOffsetTop = (realHeight - drillRealHeight) / 2.0;
+
+                    const drillCorrection = isTop ? options.drillCorrectionTop : options.drillCorrectionBottom;
+
+                    if (debugMode == 2) {
+                        console.info('Offset:', offsetLeft, offsetTop);
+                        console.info('Drill correction:', drillCorrection);
+                        console.info('Drill offset:', drillOffsetLeft, drillOffsetTop);
+                    }
+
+                    pdf.printSvg(drillSvg.content,
+                        offsetLeft + parseFloat(drillOffsetLeft.toString()) + drillCorrection.x * (isFlipped ? -1.0 : 1.0),
+                        offsetTop + parseFloat(drillOffsetTop.toString()) + drillCorrection.y,
+                        drillRealWidth,
+                        drillRealHeight,
+                        false);
+                }
 
                 if (realHeight > newLineOffset) {
                     newLineOffset = realHeight;
