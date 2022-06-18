@@ -8,6 +8,8 @@ export class Options {
   copy?: number;
   sizeCorrection?: number;
   useDrill?: boolean;
+  useMask?: boolean;
+  useSilk?: boolean;
   drillCorrectionTop?: {
     x: number;
     y: number;
@@ -17,6 +19,7 @@ export class Options {
     y: number;
   };
   padding?: number;
+  borders?: number;
   flip?: boolean;
   annotatePage: boolean;
   annotateLayers: boolean;

@@ -38,7 +38,9 @@ export const getSvg = async (file: string, options: Record<string, unknown> = {}
 
   if (options.flip) {
     const att = `scale(-1, -1) translate(-${converter.viewBox[2] + converter.viewBox[0]*2}, ${Math.abs(converter.viewBox[3] + converter.viewBox[1]*2)})`;
-    content = content.replace(/<g([^>]+)transform="\w+"/s, `<g$1transform="${att}"`);
+    await writeFile('test.svg', content);
+    content = content.replace(/<g([^>]+)transform="[\w\d\-()\s,.]+"/s, `<g$1transform="${att}"`);
+    await writeFile('test2.svg', content);
   }
 
   svg.content = content;

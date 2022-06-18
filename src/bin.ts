@@ -55,6 +55,12 @@ const retrieveOptions = async (): Promise<Options> => {
             } else if (parseFloat(v)) {
                 // @ts-ignore
                 options[k] = parseFloat(v);
+            } else if (v == 'true' || v == 'True') {
+                // @ts-ignore
+                options[k] = true;
+            } else if (v == 'false' || v == 'False') {
+                // @ts-ignore
+                options[k] = false;
             } else {
                 // @ts-ignore
                 options[k] = v;
@@ -94,8 +100,8 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
 
     pdf.printOptionsAnotation(options);
 
-    let offsetLeft: number = options.padding;
-    let offsetTop: number = options.annotatePage ? (options.padding * 2 + 7) : options.padding;
+    let offsetLeft: number = options.borders;
+    let offsetTop: number = options.borders + (options.annotatePage ? (options.padding * 1 + 7) : 0);
     let newLineOffset: number = options.padding;
 
     const copies = Array.from({length: options.copy}).fill(0);
@@ -116,14 +122,14 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
                 const isSilk = ['topSilk', 'bottomSilk'].includes(k);
                 const isMask = ['topMask', 'bottomMask'].includes(k);
                 const isNegativeMask = ['topMaskNegative', 'bottomMaskNegative'].includes(k);
-                const isDrilled = isCopper && gerbers.drill;
-                const isTop = k.indexOf('top') === 0;
-                const isBottom = k.indexOf('bottom') === 0;
-                const isModeApplicable = ((isCopper || isSilk) && options.pcbMode == 'photo' && !isNegativeMask);
+                const isDrilled = isCopper && gerbers.drill && options.useDrill;
+                const isTop = k.includes('top');
+                const isBottom = k.includes('bottom');
+                const isModeApplicable = ((isCopper || isSilk || isNegativeMask) && options.pcbMode == 'photo');
                 const isFlipped = options.flip && isTop;
                 const gerber = gerbers[k as keyof GerbersLib];
 
-                if (!gerber) {
+                if (!gerber || (isMask && !options.useMask) || (isSilk && !options.useSilk) || (isNegativeMask && options.pcbMode !== 'photo' && !options.useMask)) {
                     continue;
                 }
 
@@ -137,7 +143,7 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
                 const realWidth: number = svg.width * pdfMult;
                 const realHeight: number = svg.height * pdfMult;
 
-                if (realWidth > (pdfWidth + options.padding * 2)) {
+                if (realWidth > (pdfWidth + options.borders * 2)) {
                     // @TODO: try rotate
                 }
 
@@ -159,8 +165,8 @@ const toSinglePdf = async (gerbers: GerbersLib, options: Options) => {
                 //   // offsetTop += svg.height + options.padding;
                 // }
 
-                if ((realWidth + offsetLeft + options.padding) > pdfWidth) { // new line
-                    offsetLeft = options.padding;
+                if ((realWidth + offsetLeft + options.borders) > pdfWidth) { // new line
+                    offsetLeft = options.borders;
                     offsetTop += newLineOffset + options.padding;
                 }
 
